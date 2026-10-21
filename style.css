@@ -22,28 +22,6 @@ canvas {
   top: calc(50% + 64px);
   transform: translateX(-50%);
   padding: 12px 22px;
-  border: 0;
-  border-radius: 6px;
-  background: #e64b3c;
-  color: white;
-  font: bold 18px sans-serif;
-  cursor: pointer;
-}
-
-#next-level:hover {
-  background: #c63d33;
-}
-
-#game {
-  position: relative;
-}
-
-#next-level {
-  position: absolute;
-  top: calc(50% + 64px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 22px;
   border: 2px solid #fff;
   border-radius: 4px;
   background: #e64b3c;
@@ -54,4 +32,42 @@ canvas {
 
 #next-level:hover {
   background: #c9362a;
+}
+#start-game {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 64px);
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  background: #e64b3c;
+  color: #fff;
+  font: bold 20px sans-serif;
+  cursor: pointer;
+}
+
+#start-game:hover {
+  background: #c9362a;
+}
+
+#developer-tools,
+#developer-level-menu {
+  position: absolute;
+  right: 12px;
+  z-index: 2;
+}
+
+#developer-tools {
+  top: 40px;
+}
+
+#developer-level-menu {
+  top: 52px;
+  display: grid;
+  gap: 6px;
+}
+
+#developer-level-menu[hidden] {
+  display: none;
 }

@@ -1,6 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#112d4d"/>
-  <path d="M15 42 L30 15 L44 42 Z" fill="#ffd166"/>
-  <circle cx="30" cy="22" r="5" fill="#fff"/>
-  <rect x="25" y="29" width="10" height="15" rx="3" fill="#ff8a5b"/>
+  <rect width="64" height="64" rx="12" fill="#9ed8f5"/>
+  <circle cx="13" cy="13" r="8" fill="#ffd45c"/>
+  <path d="M7 48h21v5H7zm42-12h13v5H49z" fill="#6f9e55"/>
+  <path d="M57 36V22" stroke="#554332" stroke-width="2"/>
+  <path d="M58 22l6 3-6 3z" fill="#e64b3c"/>
+  <rect x="10" y="34" width="14" height="14" fill="#f29e4c"/>
+  <circle cx="14" cy="39" r="1.2" fill="#222"/>
+  <circle cx="20" cy="39" r="1.2" fill="#222"/>
+  <path d="M14 43c1 3 5 3 6 0" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
+  <g transform="rotate(-10 37 28)">
+    <rect x="30" y="21" width="14" height="14" fill="#e8d4b8"/>
+    <circle cx="34" cy="26" r="1.2" fill="#222"/>
+    <circle cx="40" cy="26" r="1.2" fill="#222"/>
+    <path d="M34 30c1 3 5 3 6 0" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
 </svg>
