@@ -4,13 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smiley</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css?v-2" />
   </head>
   <body>
     <main id="game">
       <canvas id="scene" width="960" height="540"></canvas>
+      <button id="start-game" type="button">Start Game</button>
       <button id="next-level" type="button" hidden>Next Level</button>
+      <button id="developer-tools" type="button">Developer Tools</button>
+      <div id="developer-level-menu" hidden></div>
     </main>
-    <script src="game.js?v=14"></script>
+    <script src="game.js?v=24"></script>
   </body>
 </html>
