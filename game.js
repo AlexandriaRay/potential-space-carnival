@@ -474,7 +474,7 @@ for (let level = 0; level < 5; level += 1) {
   ctx.fillStyle = ['#d8edff', '#d5efcc', '#f7e3bd', '#e4d7f5', '#f2d1d1'][level];
   ctx.fillRect(x, mapY, tileWidth, 90);
 
-  ctx.fillStyle = '#284b35';
+  ctx.fillStyle = '#ffd45c';
   ctx.font = 'bold 18px sans-serif';
   ctx.fillText(`Level ${level + 1}`, x + tileWidth / 2, mapY + 28);
 
@@ -1346,7 +1346,7 @@ draw();
 // And that brings us to the end of the JavaScript portion of the code! If you're reading this, thanks for looking at the code <3
 // I hope you have a great rest of your day/night! 
 // Also, for anyone wondering, you an use this code, just remember to give credit please!
-// I'll leave a few fun facts for you, since you ame all the way here.
+// I'll leave a few fun facts for you, since you came all the way here.
 // The inspiration for the names "Q" and "A" come from my dad and his brother, A for Antonio, and Q for Quinten.
 // This is my first game, hopefully the first of many!
 // I'm 16 years old at the time of writing this.
