@@ -1,3 +1,4 @@
+// This section is for the actual game mechanics. All of the "const" lines declare an element of the game, and will be useful later.
 const canvas = document.getElementById('scene');
 const ctx = canvas.getContext('2d');
 const nextLevelButton = document.getElementById('next-level');
@@ -23,7 +24,7 @@ const keyMap = {
 };
 
 const levels = [
-  {
+  { // This is the code for level one
     platforms: [
       { x: 0, y: H - 18, width: W, height: 18 },
       { x: 80, y: 400, width: 130, height: 16 },
@@ -42,7 +43,7 @@ const levels = [
       { x: 860, y: 265 }
     ]
   },
-  {
+  { // This is the ode for level two
     worldWidth: 1200,
     platforms: [
       { x: 0, y: H - 18, width: 1200, height: 18 },
@@ -67,7 +68,7 @@ const levels = [
       { x: 860, y: 235 },
     ]
   },
-  {
+  { // This is the code for level three
     worldWidth: 1400,
     platforms: [
       { x: 55, y: 440, width: 150, height: 16 },
@@ -93,7 +94,7 @@ const levels = [
       { x: 1340, y: 235 }
     ]
   },
-  {
+  { // This is the code for level four
     worldWidth: 2000,
     playerSize: 36,
     playerStarts: [
@@ -140,7 +141,7 @@ const levels = [
       { x: 1900, y: 240 }
     ]
   },
-  {
+  { // Lastly, this is the code for level five
     worldWidth: 4000,
     playerSize: 36,
     playerStarts: [
@@ -268,7 +269,7 @@ function loadLevel(index) {
   });
   cameraOffset = 0;
 }
-
+// Below is the code for the developer button
 developerToolsButton.addEventListener('click', () => {
   const code = prompt('Enter developer code:');
 
@@ -278,7 +279,7 @@ developerToolsButton.addEventListener('click', () => {
   }
 
   developerLevelMenu.replaceChildren();
-
+  // Here's the code for the dropdown developer menu
   levels.forEach((_, index) => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -309,15 +310,15 @@ developerToolsButton.addEventListener('click', () => {
 
   developerLevelMenu.hidden = false;
 });
-
+// This is the code for the start game and next level buttons
 nextLevelButton.addEventListener('click', () => loadLevel(Math.min(levelIndex + 1, levels.length - 1)));
 startGameButton.addEventListener('click', () => {
   audioContext = new AudioContext();
   gameStarted = true;
-  introActuve = true;
+  introActive = true;
   startGameButton.hidden = true;
 });
-
+// This code draws the faces of the players
 function drawFace(player) {
   const { x, y, size, color, label } = player;
   const screenX = x - cameraOffset;
@@ -346,7 +347,7 @@ function drawFace(player) {
   ctx.arc(screenX + size / 2, y + size * 0.68, size * 0.24, 0.2, Math.PI - 0.2);
   ctx.stroke();
 }
-
+// This code draws the characters that apper in the beggining cut scene and the end screen
 function drawCelebrationCharacter(x, y, player) {
   const size = 60;
 
@@ -371,12 +372,12 @@ function drawCelebrationCharacter(x, y, player) {
   ctx.arc(x + size / 2, y + size * 0.68, size * 0.24, 0.2, Math.PI - 0.2);
   ctx.stroke();
 }
-
+// This is the code for the intro sequence
 function drawIntroScene(time) {
   ctx.fillStyle = '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
 
-  ctx.Style = '#83c96b';
+  ctx.fillStyle = '#83c96b';
   ctx.fillRect(0, 390, W, H - 390);
 
   ctx.textAlign = 'center';
@@ -387,36 +388,46 @@ function drawIntroScene(time) {
   if (time < 2.5) {
     ctx.fillText('One day, brothers Q and A found some coins.', W / 2, 90);
 
-    drawCelebrationCharacter(250, 300, players[0]);
-    drawCelebrationCharacter(650, 300, players[1]);
+    drawCelebrationCharacter(250, 330, players[0]);
+    drawCelebrationCharacter(650, 330, players[1]);
 
-    for (let i = 0; i < 7; i += 1) {
-      const x = W / 2 - 48 + i * 16;
-      const y = 365 - Math.abs(i - 3) * 7;
-    
-      ctx.fillStyle = '#ffd45c';
-      ctx.beginPath();
-      ctx.arc(x - 3, y - 3, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    const rows = [4, 3, 2, 1,];
+
+    rows.forEach((coinCount, row) => {
+      for (let coin = 0; coin < coinCount; coin += 1) {
+        const x = W / 2 + (coin - (coinCount - 1) / 2) * 24;
+        const y = 376 - row * 20;
+
+        ctx.fillStyle = '#f4d13b';
+        ctx.beginPath();
+        ctx.arc(x, y, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#d7a600';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    });
 
     return;
   }
 if (time < 5) {
-  ctx.fillText('Their joy was short lived, because a tornado came soon after!', W / 2, 90);
+  ctx.fillText('Then, a tornado came soon after!', W / 2, 90);
 
-  drawCelebrationCharacter(100, 300, players[0]);
-  drawCelebrationCharacter(800, 300, players[1]);
+  drawCelebrationCharacter(100, 330, players[0]);
+  drawCelebrationCharacter(800, 330, players[1]);
 
   const progress = (time - 2.5) / 2.5;
   const tornadoX = 120 + progress * (W - 240);
-  const tornadoY = 280;
+  const tornadoY = 350;
 
   ctx.strokeStyle = '#8a8a8a';
   ctx.lineWidth = 5;
 
   for (let ring = 0; ring < 5; ring += 1) {
-    const width = 18 + ring * 9;
+    const width = 18 + (4 - ring) * 9;
     const y = tornadoY - 38 + ring * 18;
 
     ctx.beginPath();
@@ -438,7 +449,7 @@ if (time < 5) {
   return;
 }
 
-ctx.fillText('The coins were blow all over the place!', W / 2, 90);
+ctx.fillText('The coins were blown all over the place!', W / 2, 90);
 
 const tileWidth = 145;
 const gap = 25;
@@ -449,18 +460,26 @@ ctx.strokeStyle = '#6e9a61';
 ctx.lineWidth = 6;
 ctx.beginPath();
 ctx.moveTo(firstTileX + tileWidth / 2, mapY + 45);
+
+for (let level = 1; level < 5; level += 1) {
+  const markerX = firstTileX + level * (tileWidth + gap) + tileWidth / 2;
+  ctx.lineTo(markerX, mapY + 45);
+}
+
 ctx.stroke();
 
 for (let level = 0; level < 5; level += 1) {
   const x = firstTileX + level * (tileWidth + gap);
 
   ctx.fillStyle = ['#d8edff', '#d5efcc', '#f7e3bd', '#e4d7f5', '#f2d1d1'][level];
+  ctx.fillRect(x, mapY, tileWidth, 90);
+
   ctx.fillStyle = '#284b35';
   ctx.font = 'bold 18px sans-serif';
   ctx.fillText(`Level ${level + 1}`, x + tileWidth / 2, mapY + 28);
 
   if (time > 5 + level * 0.5) {
-    ctx.fillStyle = '#ffd45c';
+    ctx.fillStyle = '#284b35';
     ctx.beginPath();
     ctx.arc(x + tileWidth / 2, mapY + 62, 12, 0, Math.PI * 2);
     ctx.fill();
@@ -470,7 +489,7 @@ for (let level = 0; level < 5; level += 1) {
 ctx.font = '22px sans-serif';
 ctx.fillText('Now, they are going to get them back!', W / 2, 410);
 }
-
+// This code is for the handshake animation they do once you beat a level
 function drawHighFiveCelebration() {
   const size = 60;
   const bodyY = H / 2 - 5;
@@ -515,7 +534,7 @@ function drawHighFiveCelebration() {
     }
   }
 }
-
+// This code is for the end screen animations
 function drawGameOverScreen() {
   const endingTime = Math.max(0, winAnimationTime - 3.2);
 
@@ -603,7 +622,7 @@ ctx.textBaseline = 'middle';
 ctx.fillText('The End! Thanks for playing!', 0, 0);
 ctx.restore();
 }
-
+// This draws the spikes
 function drawSpike(spike) {
   ctx.fillStyle = levelIndex === 4 ? '#4b4b4f' : '#d44c46';
   ctx.beginPath();
@@ -616,7 +635,7 @@ function drawSpike(spike) {
   ctx.strokeStyle = levelIndex === 4 ? '#252529' : '#6d2a2a';
   ctx.stroke();
 }
-
+// This draws the health bars
 function drawHealthBars() {
   for (const [index, player] of players.entries()) {
     const x = index === 0 ? 20 : W - 220;
@@ -648,7 +667,7 @@ function drawHealthBars() {
     ctx.fillText(`${player.label}: ${player.health}/${player.maxHealth}`, index === 0 ? x : x + width, y - 3);
   }
 }
-
+// Below is the code for the background element and effects for each level
 function drawScene() {
   ctx.fillStyle = levelIndex === 4 ? '#21191d' : levelIndex === 3 ? '#222120' : levelIndex === 1 ? '#24452b' : '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
@@ -1031,7 +1050,7 @@ function drawScene() {
     ctx.stroke();
   }
 }
-
+// This is the code for the moving platforms
 function updateMovingPlatforms() {
   for (const platform of platforms) {
     if (!platform.moving) continue;
@@ -1049,7 +1068,7 @@ function updateMovingPlatforms() {
     }
   }
 }
-
+// This allows players to land on the platforms
 function landOnPlatforms(player, previousBottom) {
   if (player.vy < 0) return;
 
@@ -1069,7 +1088,7 @@ function landOnPlatforms(player, previousBottom) {
 
   player.standingPlatform = null;
 }
-
+// This is for the coin collect sound
 function playCoinSound() {
   if (!audioContext) return;
 
@@ -1089,7 +1108,7 @@ function playCoinSound() {
   oscillator.start(now);
   oscillator.stop(now + 0.18);
 }
-
+// This allows the players to actually collet the coins
 function collectCoin(player) {
   for (const coin of coins) {
     const touching = player.x + player.size > coin.x - 14 &&
@@ -1103,14 +1122,14 @@ function collectCoin(player) {
     }
   }
 }
-
+// This identifies if a player is touching a spike
 function touchesSpike(player) {
   return spikes.some((spike) => player.x < spike.x + spike.width &&
     player.x + player.size > spike.x &&
     player.y < spike.y + spike.height &&
     player.y + player.size > spike.y);
 }
-
+// This identifies if a player is touching lava
 function touchesLava(player) {
   return lava.some((pool) => player.x < pool.x + pool.width &&
     player.x + player.size > pool.x &&
@@ -1121,7 +1140,7 @@ function touchesLava(player) {
 function getCoinsLeft() {
   return coins.filter((coin) => !coin.collected).length;
 }
-
+// This determines if a player is touching the goal
 function checkGoal() {
   if (hasWon) return;
 
@@ -1131,7 +1150,7 @@ function checkGoal() {
     player.y < goal.y + goal.height &&
     player.y + player.size > goal.y
   );
-
+// This part checks if all coins have been collected, and if both players are at the goal before beating the level (You gotta work together!)
   const enteredGoal = touching.some((atGoal, index) => atGoal && !playerWasAtGoal[index]);
   playerWasAtGoal = touching;
 
@@ -1195,11 +1214,12 @@ if (player.y > H) {
   loadLevel(levelIndex);
   return;
 }
-  if (touchesSpike(player)) {
+  // This kills the player if touching a spike
+if (touchesSpike(player)) {
     loadLevel(levelIndex);
     return;
   }
-
+// This is the code for the lava damage
   if (touchesLava(player)) {
     player.lavaTime += deltaSeconds;
     const damageTicks = Math.floor(player.lavaTime / 0.2);
@@ -1237,7 +1257,7 @@ function draw(timestamp = 0) {
     introTime += deltaSeconds;
     drawIntroScene(introTime);
 
-    if (introTime >= 9) {
+    if (introTime >= 10) {
       introActive = false;
       loadLevel(0);
     }
@@ -1245,7 +1265,7 @@ function draw(timestamp = 0) {
     requestAnimationFrame(draw);
     return;
   }
-
+// This is for the beginning screen
 if (!gameStarted) {
   drawScene();
 
@@ -1323,3 +1343,11 @@ window.addEventListener('keyup', (event) => setKey(event, false));
 loadLevel(0);
 draw();
 
+// And that brings us to the end of the JavaScript portion of the code! If you're reading this, thanks for looking at the code <3
+// I hope you have a great rest of your day/night! 
+// Also, for anyone wondering, you an use this code, just remember to give credit please!
+// I'll leave a few fun facts for you, since you ame all the way here.
+// The inspiration for the names "Q" and "A" come from my dad and his brother, A for Antonio, and Q for Quinten.
+// This is my first game, hopefully the first of many!
+// I'm 16 years old at the time of writing this.
+// There MIGHT (very strong might) be a part two of this game.

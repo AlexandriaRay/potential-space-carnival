@@ -1,3 +1,4 @@
+/* this section of code is for the webpage surronding the game, and the buttons within the game. Directly below is the code for the game window */
 body {
   margin: 0;
   min-height: 100vh;
@@ -15,7 +16,7 @@ canvas {
   background: #f9f9f9;
   border: 2px solid #aaa;
 }
-
+/* Below is the code for the next level button */
 #next-level {
   position: absolute;
   left: 50%;
@@ -33,6 +34,7 @@ canvas {
 #next-level:hover {
   background: #c9362a;
 }
+/* Below is the code for the start game button */
 #start-game {
   position: absolute;
   left: 50%;
@@ -50,7 +52,7 @@ canvas {
 #start-game:hover {
   background: #c9362a;
 }
-
+/* Below is the code for the developer tools button */
 #developer-tools,
 #developer-level-menu {
   position: absolute;
@@ -61,7 +63,7 @@ canvas {
 #developer-tools {
   top: 40px;
 }
-
+/* Below is the code for the dropdown developer menu */
 #developer-level-menu {
   top: 52px;
   display: grid;

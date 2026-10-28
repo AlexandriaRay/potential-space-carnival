@@ -1,19 +1,20 @@
+<!-- This section of code identifies all of the buttons and stuff and makes sure the webpage works -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> <!-- This makes sure the webpage is in English-->
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- This set makes sure the bow surronding the game shows properly -->
     <title>Smiley</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css?v-2" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" /> <!-- This make sure the game logo shows on the game tab -->
+    <link rel="stylesheet" href="style.css?v-2" /> <!-- This makes sure the buttons all show and work correctly -->
   </head>
   <body>
     <main id="game">
-      <canvas id="scene" width="960" height="540"></canvas>
-      <button id="start-game" type="button">Start Game</button>
-      <button id="next-level" type="button" hidden>Next Level</button>
-      <button id="developer-tools" type="button">Developer Tools</button>
-      <div id="developer-level-menu" hidden></div>
+      <canvas id="scene" width="960" height="540"></canvas> <!-- This identifies the box surronding the actual game -->
+      <button id="start-game" type="button">Start Game</button> <!-- This identifies the start button -->
+      <button id="next-level" type="button" hidden>Next Level</button> <!-- This identifies the next level button -->
+      <button id="developer-tools" type="button">Developer Tools</button> <!-- This identifies the developer tools button -->
+      <div id="developer-level-menu" hidden></div> <!-- This identifies the developer menu -->
     </main>
     <script src="game.js?v=24"></script>
   </body>
