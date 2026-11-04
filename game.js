@@ -44,6 +44,7 @@ const levels = [
     ]
   },
   { // This is the ode for level two
+  {
     worldWidth: 1200,
     platforms: [
       { x: 0, y: H - 18, width: 1200, height: 18 },
@@ -69,6 +70,7 @@ const levels = [
     ]
   },
   { // This is the code for level three
+  {
     worldWidth: 1400,
     platforms: [
       { x: 55, y: 440, width: 150, height: 16 },
@@ -95,6 +97,7 @@ const levels = [
     ]
   },
   { // This is the code for level four
+  {
     worldWidth: 2000,
     playerSize: 36,
     playerStarts: [
@@ -142,6 +145,7 @@ const levels = [
     ]
   },
   { // Lastly, this is the code for level five
+  {
     worldWidth: 4000,
     playerSize: 36,
     playerStarts: [
@@ -168,6 +172,7 @@ const levels = [
       { x: 3850, y: 430, width: 130, height: 16 }
     ],
     goal: { x: 3930, y: H - 180, width: 34, height: 72 },
+    goal: { x: 3930, y: H - 170, width: 34, height: 72 },
     spikes:[
       { x: 450, y: 340, width: 34, height: 20 },
       { x: 1080, y: 385, width: 34, height: 20 },
@@ -304,6 +309,16 @@ developerToolsButton.addEventListener('click', () => {
 
   developerLevelMenu.replaceChildren();
   // Here's the code for the dropdown developer menu
+developerToolsButton.addEventListener('click', () => {
+  const code = prompt('Enter developer code:');
+
+  if (code !== '5683') {
+    if (code !== null) alert('Incorrect code.');
+    return;
+  }
+
+  developerLevelMenu.replaceChildren();
+
   levels.forEach((_, index) => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -338,6 +353,15 @@ developerToolsButton.addEventListener('click', () => {
 nextLevelButton.addEventListener('click', () => loadLevel(Math.min(levelIndex + 1, levels.length - 1)));
 startGameButton.addEventListener('click', () => {
   audioContext = new AudioContext();
+  developerLevelMenu.hidden = false;
+});
+
+nextLevelButton.addEventListener('click', () => loadLevel(Math.min(levelIndex + 1, levels.length - 1)));
+startGameButton.addEventListener('click', () => {
+  audioContext = new AudioContext();
+  gameStarted = true;
+  startGameButton.hidden = true;
+});
 
 levelMusic[0].play().then(() => {
   levelMusic[0].pause();
@@ -378,6 +402,7 @@ function drawFace(player) {
   ctx.stroke();
 }
 // This code draws the characters that apper in the beginning cut scene and the end screen
+
 function drawCelebrationCharacter(x, y, player) {
   const size = 60;
 
@@ -653,6 +678,30 @@ ctx.fillText('The End! Thanks for playing!', 0, 0);
 ctx.restore();
 }
 // This draws the spikes
+
+function drawGameOverScreen() {
+  ctx.fillStyle = '#9ed8f5';
+  ctx.fillRect(0, 0, W, H);
+
+ctx.fillStyle = '#ffd45c';
+ctx.beginPath();
+ctx.arc(W - 70, 70, 34, 0, Math.PI * 2);
+ctx.fill();
+
+ctx.fillStyle = '#83c96b';
+ctx.fillRect(0, H * 0.72, W, H * 0.28)
+
+drawCelebrationCharacter(W / 2 - 70, H * 0.53, players[1]);
+drawCelebrationCharacter(W / 2 + 10, H * 0.53, players[0]);
+
+ctx.textAlign = 'center';
+ctx.textBaseLine = 'middle';
+
+ctx.fillStyle = '#284b35';
+ctx.font = 'bold 48px sans-serif';
+ctx.fillText('Congratulations, you beat the game!', W / 2, H * 0.2);
+}
+
 function drawSpike(spike) {
   ctx.fillStyle = levelIndex === 4 ? '#4b4b4f' : '#d44c46';
   ctx.beginPath();
@@ -666,6 +715,15 @@ function drawSpike(spike) {
   ctx.stroke();
 }
 // This draws the health bars
+function drawHealthBars() {
+  for (const [index, player] of players.entries()) {
+    const x = index === 0 ? 20 : W - 220;
+    const y = 20;
+    const width = 200;
+    const height = 18;
+    const gap = 3;
+    const tickWidth = (width - gap * (player.maxHealth - 1)) / player.maxHealth;
+
 function drawHealthBars() {
   for (const [index, player] of players.entries()) {
     const x = index === 0 ? 20 : W - 220;
@@ -698,6 +756,7 @@ function drawHealthBars() {
   }
 }
 // Below is the code for the background element and effects for each level
+
 function drawScene() {
   ctx.fillStyle = levelIndex === 4 ? '#21191d' : levelIndex === 3 ? '#222120' : levelIndex === 1 ? '#24452b' : '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
@@ -872,6 +931,69 @@ function drawScene() {
   ctx.fill();
 
   
+
+ if (levelIndex === 2) {
+  ctx.fillStyle = '#789bb8';
+  ctx.beginPath();
+  ctx.moveTo(0, 390);
+  ctx.lineTo(150, 210);
+  ctx.lineTo(300, 390);
+  ctx.lineTo(470, 185);
+  ctx.lineTo(650, 390);
+  ctx.lineTo(800, 230);
+  ctx.lineTo(W, 390);
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#95bfe2';
+  ctx.beginPath();
+  ctx.moveTo(0, 445);
+  ctx.lineTo(190, 285);
+  ctx.lineTo(360, 445);
+  ctx.lineTo(570, 260);
+  ctx.lineTo(740, 445);
+  ctx.lineTo(830,310);
+  ctx.lineTo(W, 420);
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fill();
+
+    // Snow on the far mountain peaks
+  ctx.fillStyle = '#f5fbff';
+  ctx.beginPath();
+  ctx.moveTo(105, 264);
+  ctx.lineTo(150, 210);
+  ctx.lineTo(195, 264);
+  ctx.lineTo(168, 248);
+  ctx.lineTo(150, 258);
+  ctx.lineTo(132, 246);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(425, 239);
+  ctx.lineTo(470, 185);
+  ctx.lineTo(515, 234);
+  ctx.lineTo(488, 224);
+  ctx.lineTo(470, 235);
+  ctx.lineTo(452, 222);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(747, 284);
+  ctx.lineTo(800, 230);
+  ctx.lineTo(845, 275);
+  ctx.lineTo(818, 269);
+  ctx.lineTo(800, 280);
+  ctx.lineTo(782, 267);
+  ctx.closePath();
+  ctx.fill();
+
+  // Snow on the closer mountain peaks
   ctx.fillStyle = '#eaf6ff';
   ctx.beginPath();
   ctx.moveTo(145, 323);
@@ -1126,6 +1248,13 @@ function playCoinSound() {
   const oscillator = audioContext.createOscillator();
   const volume = audioContext.createGain();
 
+function playCoinSound() {
+  if (!audioContext) return;
+
+  const now = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const volume = audioContext.createGain();
+
   oscillator.type = 'sine';
   oscillator.frequency.setValueAtTime(880, now);
   oscillator.frequency.setValueAtTime(1320, now + 0.08);
@@ -1139,6 +1268,7 @@ function playCoinSound() {
   oscillator.stop(now + 0.18);
 }
 // This allows the players to actually collet the coins
+
 function collectCoin(player) {
   for (const coin of coins) {
     const touching = player.x + player.size > coin.x - 14 &&
@@ -1174,6 +1304,20 @@ function getCoinsLeft() {
 function checkGoal() {
   if (hasWon) return;
 
+function touchesLava(player) {
+  return lava.some((pool) => player.x < pool.x + pool.width &&
+    player.x + player.size > pool.x &&
+    player.y < pool.y + pool.height &&
+    player.y + player.size > pool.y);
+}
+
+function getCoinsLeft() {
+  return coins.filter((coin) => !coin.collected).length;
+}
+
+function checkGoal() {
+  if (hasWon) return;
+
   const touching = players.map((player) =>
     player.x < goal.x + goal.width &&
     player.x + player.size > goal.x &&
@@ -1181,6 +1325,17 @@ function checkGoal() {
     player.y + player.size > goal.y
   );
 // This part checks if all coins have been collected, and if both players are at the goal before beating the level (You gotta work together!)
+  const enteredGoal = touching.some((atGoal, index) => atGoal && !playerWasAtGoal[index]);
+  playerWasAtGoal = touching;
+
+  if (!touching.some(Boolean)) {
+    waitingForOtherPlayer = false;
+    goalMessage = '';
+    goalMessageSeconds = 0;
+    return;
+  }
+
+
   const enteredGoal = touching.some((atGoal, index) => atGoal && !playerWasAtGoal[index]);
   playerWasAtGoal = touching;
 
@@ -1246,10 +1401,26 @@ if (player.y > H) {
 }
   // This kills the player if touching a spike
 if (touchesSpike(player)) {
+  if (touchesSpike(player)) {
     loadLevel(levelIndex);
     return;
   }
 // This is the code for the lava damage
+  if (touchesLava(player)) {
+    player.lavaTime += deltaSeconds;
+    const damageTicks = Math.floor(player.lavaTime / 0.2);
+if (damageTicks > 0) {
+  player.health = Math.max(0, player.health - damageTicks);
+  player.lavaTime -= damageTicks * 0.2;
+}
+    if (player.health === 0) {
+      loadLevel(levelIndex);
+      return;
+    }
+  } else {
+    player.lavaTime = 0;
+  }
+
   if (touchesLava(player)) {
     player.lavaTime += deltaSeconds;
     const damageTicks = Math.floor(player.lavaTime / 0.2);
@@ -1358,6 +1529,8 @@ drawScene();
 
         const fade = Math.min((winAnimationTime - 2.2) / 1, 1);
         ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+        const fade = Math.min((winAnimationTime - 2.2) / 1, 1);
+        ctx.fillStyle = 'rgba(255, 255, 255, ${fade})';
         ctx.fillRect(0, 0, W, H);
       }
     }
@@ -1392,3 +1565,4 @@ draw();
 // I'm 16 years old at the time of writing this.
 // There MIGHT (very strong might) be a part two of this game.
 // Note to self, open terminal and paste "python3 -m http.server 8000" and click enter to open game.
+draw();

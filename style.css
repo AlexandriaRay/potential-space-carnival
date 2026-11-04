@@ -53,6 +53,7 @@ canvas {
   background: #c9362a;
 }
 /* Below is the code for the developer tools button */
+
 #developer-tools,
 #developer-level-menu {
   position: absolute;
@@ -68,6 +69,11 @@ canvas {
   top: 52px;
   display: grid;
   gap: 5px;
+
+#developer-level-menu {
+  top: 52px;
+  display: grid;
+  gap: 6px;
 }
 
 #developer-level-menu[hidden] {
