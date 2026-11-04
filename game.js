@@ -232,6 +232,19 @@ let winAnimationTime = 0;
 let lastFrameTime = 0;
 let cameraOffset = 0;
 let audioContext;
+// This is the code for all of the level music
+const levelMusic = [
+  new Audio('Q n A music 1.mp3'), 
+  new Audio('Q n A music 2.mp3'),
+  new Audio('Q n A music 3.mp3'),
+  new Audio('Q n A music 4.mp3'),
+  new Audio('Q n A music 5.mp3')  
+];
+
+levelMusic.forEach(music => {
+  music.loop = true;
+  music.volume = 1.0;
+});
 
 const players = [
   { x: 120, y: 200, size: 70, vy: 0, onGround: false, standingPlatform: null, color: '#e8d4b8', label: 'A', controls: keys.arrows, health: 10, maxHealth: 10, lavaTime: 0 },
@@ -240,6 +253,17 @@ const players = [
 
 function loadLevel(index) {
   levelIndex = index;
+
+levelMusic.forEach(music => {
+  music.pause();
+  music.currentTime = 0;
+  music.volume = 1.0;
+});
+
+if (levelMusic[index]) {
+  levelMusic[index].play().catch(() => {});
+}
+
   const level = levels[levelIndex];
   platforms = level.platforms.map((platform) => ({
     ...platform,
@@ -314,6 +338,12 @@ developerToolsButton.addEventListener('click', () => {
 nextLevelButton.addEventListener('click', () => loadLevel(Math.min(levelIndex + 1, levels.length - 1)));
 startGameButton.addEventListener('click', () => {
   audioContext = new AudioContext();
+
+levelMusic[0].play().then(() => {
+  levelMusic[0].pause();
+  levelMusic[0].currentTime = 0;
+}).catch(error => console.log(error));
+
   gameStarted = true;
   introActive = true;
   startGameButton.hidden = true;
@@ -347,7 +377,7 @@ function drawFace(player) {
   ctx.arc(screenX + size / 2, y + size * 0.68, size * 0.24, 0.2, Math.PI - 0.2);
   ctx.stroke();
 }
-// This code draws the characters that apper in the beggining cut scene and the end screen
+// This code draws the characters that apper in the beginning cut scene and the end screen
 function drawCelebrationCharacter(x, y, player) {
   const size = 60;
 
@@ -414,7 +444,7 @@ function drawIntroScene(time) {
     return;
   }
 if (time < 5) {
-  ctx.fillText('Then, a tornado came soon after!', W / 2, 90);
+  ctx.fillText('But then, a tornado came soon after!', W / 2, 90);
 
   drawCelebrationCharacter(100, 330, players[0]);
   drawCelebrationCharacter(800, 330, players[1]);
@@ -779,7 +809,7 @@ function drawScene() {
   ctx.arc(100, 90, 42, 0, Math.PI * 2);
   ctx.fill();
  }
-
+// this is the code for the mountains in level two
  if (levelIndex === 2) {
   ctx.fillStyle = '#789bb8';
   ctx.beginPath();
@@ -809,7 +839,7 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
-    // Snow on the far mountain peaks
+  
   ctx.fillStyle = '#f5fbff';
   ctx.beginPath();
   ctx.moveTo(105, 264);
@@ -841,7 +871,7 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
-  // Snow on the closer mountain peaks
+  
   ctx.fillStyle = '#eaf6ff';
   ctx.beginPath();
   ctx.moveTo(145, 323);
@@ -1316,6 +1346,16 @@ drawScene();
       drawHighFiveCelebration();
 
       if (isFinalLevel && winAnimationTime > 2.2) {
+
+        levelMusic[levelIndex].volume = Math.max(
+          0, 
+          levelMusic[levelIndex].volume - deltaSeconds
+        );
+
+        if (levelMusic[levelIndex].volume === 0) {
+          levelMusic[levelIndex].pause();
+        }
+
         const fade = Math.min((winAnimationTime - 2.2) / 1, 1);
         ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
         ctx.fillRect(0, 0, W, H);
@@ -1351,3 +1391,4 @@ draw();
 // This is my first game, hopefully the first of many!
 // I'm 16 years old at the time of writing this.
 // There MIGHT (very strong might) be a part two of this game.
+// Note to self, open terminal and paste "python3 -m http.server 8000" and click enter to open game.
