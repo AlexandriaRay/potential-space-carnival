@@ -7,9 +7,11 @@ body {
   background: #e5e5e5;
 }
 
+
 #game {
   position: relative;
 }
+
 
 canvas {
   display: block;
@@ -31,6 +33,7 @@ canvas {
   cursor: pointer;
 }
 
+
 #next-level:hover {
   background: #c9362a;
 }
@@ -49,6 +52,7 @@ canvas {
   cursor: pointer;
 }
 
+
 #start-game:hover {
   background: #c9362a;
 }
@@ -60,6 +64,7 @@ canvas {
   z-index: 2;
 }
 
+
 #developer-tools {
   top: 40px;
 }
@@ -70,7 +75,9 @@ canvas {
   gap: 5px;
 }
 
+
 #developer-level-menu[hidden] {
   display: none;
 }
+
 

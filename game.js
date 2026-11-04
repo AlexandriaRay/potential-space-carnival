@@ -6,13 +6,16 @@ const startGameButton = document.getElementById('start-game');
 const developerToolsButton = document.getElementById('developer-tools');
 const developerLevelMenu = document.getElementById('developer-level-menu');
 
+
 const W = canvas.width;
 const H = canvas.height;
+
 
 const keys = {
   arrows: { left: false, right: false, up: false },
   wasd: { left: false, right: false, up: false }
 };
+
 
 const keyMap = {
   arrowleft: ['arrows', 'left'],
@@ -22,6 +25,7 @@ const keyMap = {
   d: ['wasd', 'right'],
   w: ['wasd', 'up']
 };
+
 
 const levels = [
   { // This is the code for level one
@@ -175,6 +179,7 @@ const levels = [
       { x: 2290, y: 330, width: 34, height: 20 },
       { x: 3210, y: 310, width: 34, height: 20 },
 
+
       ...Array.from({ length: 80 }, (_, i) => {
         const width = 50;
         const height = 20 + ((i * 13) % 17);
@@ -214,6 +219,7 @@ const levels = [
   }
 ];
 
+
 let levelIndex = 0;
 let platforms = levels[levelIndex].platforms;
 let goal = levels[levelIndex].goal;
@@ -234,25 +240,29 @@ let cameraOffset = 0;
 let audioContext;
 // This is the code for all of the level music
 const levelMusic = [
-  new Audio('Q n A music 1.mp3'), 
+  new Audio('Q n A music 1.mp3'),
   new Audio('Q n A music 2.mp3'),
   new Audio('Q n A music 3.mp3'),
   new Audio('Q n A music 4.mp3'),
   new Audio('Q n A music 5.mp3')  
 ];
 
+
 levelMusic.forEach(music => {
   music.loop = true;
   music.volume = 1.0;
 });
+
 
 const players = [
   { x: 120, y: 200, size: 70, vy: 0, onGround: false, standingPlatform: null, color: '#e8d4b8', label: 'A', controls: keys.arrows, health: 10, maxHealth: 10, lavaTime: 0 },
   { x: 120, y: 200, size: 70, vy: 0, onGround: false, standingPlatform: null, color: '#f29e4c', label: 'Q', controls: keys.wasd, health: 10, maxHealth: 10, lavaTime: 0 }
 ];
 
+
 function loadLevel(index) {
   levelIndex = index;
+
 
 levelMusic.forEach(music => {
   music.pause();
@@ -260,9 +270,11 @@ levelMusic.forEach(music => {
   music.volume = 1.0;
 });
 
+
 if (levelMusic[index]) {
   levelMusic[index].play().catch(() => {});
 }
+
 
   const level = levels[levelIndex];
   platforms = level.platforms.map((platform) => ({
@@ -281,6 +293,7 @@ if (levelMusic[index]) {
   winAnimationTime = 0;
   nextLevelButton.hidden = true;
 
+
   players.forEach((player, index) => {
     player.x = level.playerStarts?.[index]?.x ?? 120;
     player.y = level.playerStarts?.[index]?.y ?? 200;
@@ -297,10 +310,12 @@ if (levelMusic[index]) {
 developerToolsButton.addEventListener('click', () => {
   const code = prompt('Enter developer code:');
 
+
   if (code !== '5683') {
     if (code !== null) alert('Incorrect code.');
     return;
   }
+
 
   developerLevelMenu.replaceChildren();
   // Here's the code for the dropdown developer menu
@@ -309,6 +324,7 @@ developerToolsButton.addEventListener('click', () => {
     button.type = 'button';
     button.textContent = `Level ${index + 1}`;
 
+
     button.addEventListener('click', () => {
       gameStarted = true;
       startGameButton.hidden = true;
@@ -316,8 +332,10 @@ developerToolsButton.addEventListener('click', () => {
       developerLevelMenu.hidden = true;
     });
 
+
     developerLevelMenu.append(button);
   });
+
 
   const endScreenButton = document.createElement('button');
   endScreenButton.type = 'button';
@@ -332,6 +350,7 @@ developerToolsButton.addEventListener('click', () => {
   });
   developerLevelMenu.append(endScreenButton);
 
+
   developerLevelMenu.hidden = false;
 });
 // This is the code for the start game and next level buttons
@@ -339,10 +358,12 @@ nextLevelButton.addEventListener('click', () => loadLevel(Math.min(levelIndex + 
 startGameButton.addEventListener('click', () => {
   audioContext = new AudioContext();
 
+
 levelMusic[0].play().then(() => {
   levelMusic[0].pause();
   levelMusic[0].currentTime = 0;
 }).catch(error => console.log(error));
+
 
   gameStarted = true;
   introActive = true;
@@ -353,8 +374,10 @@ function drawFace(player) {
   const { x, y, size, color, label } = player;
   const screenX = x - cameraOffset;
 
+
   ctx.fillStyle = color;
   ctx.fillRect(screenX, y, size, size);
+
 
   ctx.fillStyle = '#111';
   ctx.font = 'bold 22px sans-serif';
@@ -362,14 +385,17 @@ function drawFace(player) {
   ctx.textBaseline = 'middle';
   ctx.fillText(label, screenX + size / 2, y - 14);
 
+
   const eyeY = y + size * 0.38;
   const eyeRadius = size * 0.08;
+
 
   ctx.fillStyle = '#222';
   ctx.beginPath();
   ctx.arc(screenX + size * 0.3, eyeY, eyeRadius, 0, Math.PI * 2);
   ctx.arc(screenX + size * 0.7, eyeY, eyeRadius, 0, Math.PI * 2);
   ctx.fill();
+
 
   ctx.strokeStyle = '#000';
   ctx.lineWidth = 4;
@@ -381,8 +407,10 @@ function drawFace(player) {
 function drawCelebrationCharacter(x, y, player) {
   const size = 60;
 
+
   ctx.fillStyle = player.color;
   ctx.fillRect(x, y, size, size);
+
 
   ctx.fillStyle = '#111';
   ctx.font = 'bold 18px sans-serif';
@@ -390,11 +418,13 @@ function drawCelebrationCharacter(x, y, player) {
   ctx.textBaseline = 'middle';
   ctx.fillText(player.label, x + size / 2, y - 10);
 
+
   ctx.fillStyle = '#222';
   ctx.beginPath();
   ctx.arc(x + size * 0.3, y + size * 0.38, size * 0.08, 0, Math.PI * 2);
   ctx.arc(x + size * 0.7, y + size * 0.38, size * 0.08, 0, Math.PI * 2);
   ctx.fill();
+
 
   ctx.strokeStyle = '#000';
   ctx.lineWidth = 3;
@@ -407,31 +437,39 @@ function drawIntroScene(time) {
   ctx.fillStyle = '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
 
+
   ctx.fillStyle = '#83c96b';
   ctx.fillRect(0, 390, W, H - 390);
+
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#284b35'
   ctx.font = 'bold 38px sans-serif';
 
+
   if (time < 2.5) {
     ctx.fillText('One day, brothers Q and A found some coins.', W / 2, 90);
+
 
     drawCelebrationCharacter(250, 330, players[0]);
     drawCelebrationCharacter(650, 330, players[1]);
 
+
     const rows = [4, 3, 2, 1,];
+
 
     rows.forEach((coinCount, row) => {
       for (let coin = 0; coin < coinCount; coin += 1) {
         const x = W / 2 + (coin - (coinCount - 1) / 2) * 24;
         const y = 376 - row * 20;
 
+
         ctx.fillStyle = '#f4d13b';
         ctx.beginPath();
         ctx.arc(x, y, 14, 0, Math.PI * 2);
         ctx.fill();
+
 
         ctx.strokeStyle = '#d7a600';
         ctx.lineWidth = 3;
@@ -441,34 +479,42 @@ function drawIntroScene(time) {
       }
     });
 
+
     return;
   }
 if (time < 5) {
   ctx.fillText('But then, a tornado came soon after!', W / 2, 90);
 
+
   drawCelebrationCharacter(100, 330, players[0]);
   drawCelebrationCharacter(800, 330, players[1]);
+
 
   const progress = (time - 2.5) / 2.5;
   const tornadoX = 120 + progress * (W - 240);
   const tornadoY = 350;
 
+
   ctx.strokeStyle = '#8a8a8a';
   ctx.lineWidth = 5;
+
 
   for (let ring = 0; ring < 5; ring += 1) {
     const width = 18 + (4 - ring) * 9;
     const y = tornadoY - 38 + ring * 18;
+
 
     ctx.beginPath();
     ctx.ellipse(tornadoX, y, width, 7, 0, 0, Math.PI * 2);
     ctx.stroke();
   }
 
+
   for (let coin = 0; coin < 6; coin += 1) {
     const angle = time * 7 + coin * (Math.PI * 2 / 6);
     const x = tornadoX + Math.cos(angle) * 45;
     const y = tornadoY + Math.sin(angle) * 28;
+
 
     ctx.fillStyle = '#ffd45c'
     ctx.beginPath();
@@ -476,37 +522,47 @@ if (time < 5) {
     ctx.fill();
   }
 
+
   return;
 }
 
+
 ctx.fillText('The coins were blown all over the place!', W / 2, 90);
+
 
 const tileWidth = 145;
 const gap = 25;
 const firstTileX = (W - (5 * tileWidth + 4 * gap)) / 2
 const mapY = 250;
 
+
 ctx.strokeStyle = '#6e9a61';
 ctx.lineWidth = 6;
 ctx.beginPath();
 ctx.moveTo(firstTileX + tileWidth / 2, mapY + 45);
+
 
 for (let level = 1; level < 5; level += 1) {
   const markerX = firstTileX + level * (tileWidth + gap) + tileWidth / 2;
   ctx.lineTo(markerX, mapY + 45);
 }
 
+
 ctx.stroke();
+
 
 for (let level = 0; level < 5; level += 1) {
   const x = firstTileX + level * (tileWidth + gap);
 
+
   ctx.fillStyle = ['#d8edff', '#d5efcc', '#f7e3bd', '#e4d7f5', '#f2d1d1'][level];
   ctx.fillRect(x, mapY, tileWidth, 90);
+
 
   ctx.fillStyle = '#ffd45c';
   ctx.font = 'bold 18px sans-serif';
   ctx.fillText(`Level ${level + 1}`, x + tileWidth / 2, mapY + 28);
+
 
   if (time > 5 + level * 0.5) {
     ctx.fillStyle = '#284b35';
@@ -515,6 +571,7 @@ for (let level = 0; level < 5; level += 1) {
     ctx.fill();
   }
 }
+
 
 ctx.font = '22px sans-serif';
 ctx.fillText('Now, they are going to get them back!', W / 2, 410);
@@ -533,8 +590,10 @@ function drawHighFiveCelebration() {
   const leftHandX = leftShoulderX + (W / 2 - leftShoulderX) * reach;
   const rightHandX = rightShoulderX + (W / 2 - rightShoulderX) * reach;
 
+
   ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
   ctx.fillRect(0, 0, W, H);
+
 
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 48px sans-serif';
@@ -542,8 +601,10 @@ function drawHighFiveCelebration() {
   ctx.textBaseline = 'middle';
   ctx.fillText('Level Complete!', W / 2, H / 2 - 105);
 
+
   drawCelebrationCharacter(leftX, bodyY, players[0]);
   drawCelebrationCharacter(rightX, bodyY, players[1]);
+
 
   for (const [handX, color] of [[leftHandX, players[0].color], [rightHandX, players[1].color]]) {
     ctx.fillStyle = color;
@@ -551,6 +612,7 @@ function drawHighFiveCelebration() {
     ctx.arc(handX, handY, 9, 0, Math.PI * 2);
     ctx.fill();
   }
+
 
   if (reach === 1) {
     ctx.strokeStyle = '#ffd45c';
@@ -568,8 +630,10 @@ function drawHighFiveCelebration() {
 function drawGameOverScreen() {
   const endingTime = Math.max(0, winAnimationTime - 3.2);
 
+
   ctx.fillStyle = '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
+
 
   const sunY = H * 0.42 - Math.min(endingTime / 1.5, 1) * (H * 0.32);
   ctx.fillStyle = '#ffd45c';
@@ -577,9 +641,11 @@ function drawGameOverScreen() {
   ctx.arc(W - 90, sunY, 38, 0, Math.PI * 2);
   ctx.fill();
 
+
   for (let cloud = 0; cloud < 3; cloud += 1) {
     const cloudX = ((cloud * 350 + endingTime * (18 + cloud * 5)) % (W + 180)) - 90;
     const cloudY = 75 + cloud * 48;
+
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
     ctx.beginPath();
@@ -589,14 +655,17 @@ function drawGameOverScreen() {
     ctx.fill();
   }
 
+
 const groundY = H * 0.72;
 ctx.fillStyle = '#83c96b';
 ctx.fillRect(0, groundY, W, H - groundY);
+
 
 for (let flower = 0; flower < 9; flower += 1) {
   const flowerX = 45 + flower * 110;
   const bloom = Math.min(Math.max((endingTime - flower * 0.12) / 0.35, 0), 1);
   if (bloom === 0) continue;
+
 
   ctx.save();
   ctx.translate(flowerX, groundY + 28);
@@ -607,7 +676,7 @@ for (let flower = 0; flower < 9; flower += 1) {
   ctx.moveTo(0, 0);
   ctx.lineTo(0, -22);
   ctx.stroke();
-  
+ 
   ctx.fillStyle = flower % 2 === 0 ? '#ff78a8' : '#fff2a6';
   for (let petal = 0; petal < 5; petal += 1) {
     const angle = petal * Math.PI * 2 / 5;
@@ -615,6 +684,7 @@ for (let flower = 0; flower < 9; flower += 1) {
     ctx.arc(Math.cos(angle) * 7, -22 + Math.sin(angle) * 7, 4, 0, Math.PI * 2);
     ctx.fill();
   }
+
 
   ctx.fillStyle = ' #ffd45c';
   ctx.beginPath();
@@ -627,11 +697,13 @@ const characterY = groundY - 40 - bounce;
 drawCelebrationCharacter(W / 2 - 70, characterY, players[1]);
 drawCelebrationCharacter(W / 2 + 10, characterY, players[0]);
 
+
 const confettiColors = ['#f15b5b', '#ffd45c', '#4f9de8', '#a66be0', '#46b978'];
 for (let piece = 0; piece < 60; piece += 1) {
   const  x = (piece * 97 + Math.sin(piece * 12.3) * 35 + W) % W;
   const speed = 70 + (piece * 17) % 90;
   const y = ((endingTime * speed + piece * 47) % (H + 50)) - 2;
+
 
   ctx.save();
   ctx.translate(x + Math.sin(endingTime * 3 + piece) * 12, y);
@@ -640,6 +712,7 @@ for (let piece = 0; piece < 60; piece += 1) {
   ctx.fillRect(-3, -5, 6, 10);
   ctx.restore();
 }
+
 
 const titleScale = 0.6 + 0.4 * Math.min(endingTime / 0.45, 1);
 ctx.save();
@@ -662,6 +735,7 @@ function drawSpike(spike) {
   ctx.closePath();
   ctx.fill();
 
+
   ctx.strokeStyle = levelIndex === 4 ? '#252529' : '#6d2a2a';
   ctx.stroke();
 }
@@ -674,6 +748,7 @@ function drawHealthBars() {
     const height = 18;
     const gap = 3;
     const tickWidth = (width - gap * (player.maxHealth - 1)) / player.maxHealth;
+
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
     ctx.fillRect(x - 5, y - 5, width + 10, height + 10);
@@ -690,6 +765,7 @@ function drawHealthBars() {
       ctx.strokeRect(tickX, y, tickWidth, height);
     }
 
+
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 16px sans-serif';
     ctx.textAlign = index === 0 ? 'left' : 'right';
@@ -702,12 +778,15 @@ function drawScene() {
   ctx.fillStyle = levelIndex === 4 ? '#21191d' : levelIndex === 3 ? '#222120' : levelIndex === 1 ? '#24452b' : '#9ed8f5';
   ctx.fillRect(0, 0, W, H);
 
+
   if (levelIndex === 4) {
     const time = performance.now() / 1000;
+
 
     for (let peak = -1; peak < 8; peak += 1) {
       const x = peak * 520 - cameraOffset * 0.22;
       const peakY = 190 + (peak % 3) * 35;
+
 
       ctx.fillStyle = '#38272b';
       ctx.beginPath();
@@ -716,6 +795,7 @@ function drawScene() {
       ctx.lineTo(x + 210, H);
       ctx.closePath();
       ctx.fill();
+
 
       ctx.fillStyle = '#713329';
       ctx.beginPath();
@@ -727,9 +807,11 @@ function drawScene() {
       ctx.fill();
     }
 
+
     for (let ember = 0; ember < 28; ember += 1) {
       const x =(ember * 173 + Math.sin(time + ember) * 20 - cameraOffset * 0.35 + W * 2) % W;
       const y = H - ((ember * 89 + time * 28) % (H + 20));
+
 
       ctx.fillStyle = `rgba(255, ${100 + ember % 80}, 35, 0.8)`;
       ctx.beginPath();
@@ -738,14 +820,17 @@ function drawScene() {
     }
   }
 
+
   if (levelIndex === 3) {
     const time = performance.now() / 1000;
+
 
     for (let i = 0; i < 24; i += 1) {
       const x = (i * 137 + Math.sin(time + i) * 18 + W) % W;
       const y = H - ((i * 97 + time * 32) % (H + 20));
       const size = 2 + (i % 3);
       const alpha = 0.45 + (Math.sin(time * 2 + i) + 1) * 0.2;
+
 
       ctx.fillStyle = `rgba(255, 150, 50, ${alpha})`;
       ctx.beginPath();
@@ -758,8 +843,10 @@ function drawScene() {
     for (let x = -60; x < W + 120; x += 180, treeIndex++) {
       const treeTop = treeIndex % 2 === 0 ? 125 : 165;
 
+
       ctx.fillStyle = '#1b3824';
       ctx.fillRect(x + 67, treeTop, 22, H - treeTop);
+
 
       ctx.fillStyle = '#1b3c27';
       ctx.beginPath();
@@ -770,14 +857,19 @@ function drawScene() {
       ctx.strokeStyle = '#315c32';
       ctx.lineWidth = 5;
 
+
       for (let vineX = 40; vineX < W; vineX += 240) {
         ctx.beginPath();
         ctx.moveTo(vineX, 0);
 
 
 
+
+
+
        ctx.bezierCurveTo(vineX + 18, 175, vineX - 16, 230, vineX + 8, 295);
         ctx.stroke();
+
 
         ctx.fillStyle = '#4f8a3b';
         for (let leafY = 165; leafY < 280; leafY += 35) {
@@ -803,6 +895,7 @@ function drawScene() {
     ctx.fill();
   }
 
+
  if (levelIndex !== 1 && levelIndex !== 3 && levelIndex !== 4) {
   ctx.fillStyle = '#ffd45c';
   ctx.beginPath();
@@ -825,6 +918,7 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
+
   ctx.fillStyle = '#95bfe2';
   ctx.beginPath();
   ctx.moveTo(0, 445);
@@ -839,7 +933,8 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
-  
+
+ 
   ctx.fillStyle = '#f5fbff';
   ctx.beginPath();
   ctx.moveTo(105, 264);
@@ -851,6 +946,7 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
+
   ctx.beginPath();
   ctx.moveTo(425, 239);
   ctx.lineTo(470, 185);
@@ -860,6 +956,7 @@ function drawScene() {
   ctx.lineTo(452, 222);
   ctx.closePath();
   ctx.fill();
+
 
   ctx.beginPath();
   ctx.moveTo(747, 284);
@@ -871,7 +968,8 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
-  
+
+ 
   ctx.fillStyle = '#eaf6ff';
   ctx.beginPath();
   ctx.moveTo(145, 323);
@@ -883,6 +981,7 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
+
   ctx.beginPath();
   ctx.moveTo(525, 299);
   ctx.lineTo(570, 260);
@@ -892,6 +991,7 @@ function drawScene() {
   ctx.lineTo(552, 290);
   ctx.closePath();
   ctx.fill();
+
 
   ctx.beginPath();
   ctx.moveTo(805, 348);
@@ -906,26 +1006,32 @@ function drawScene() {
   for (const platform of platforms) {
     const screenX = platform.x - cameraOffset;
 
+
     if (levelIndex === 1 && platform.y !== H - 18) {
       ctx.fillStyle = '#102b1b';
       ctx.fillRect(screenX, platform.y, platform.width, platform.height);
+
 
       for (let leafX = screenX - 8; leafX < screenX + platform.width + 8; leafX += 18) {
         const shade = Math.floor((leafX - screenX + 8) / 18) % 3;
         ctx.fillStyle = shade === 0 ? '#1b4828' : shade === 1 ? '#245a31' : '#2c6638';
 
+
         ctx.beginPath();
         ctx.ellipse(leafX, platform.y + 1, 12, 6, -0.2, 0, Math.PI * 2);
         ctx.fill();
+
 
         ctx.beginPath();
         ctx.ellipse(leafX + 6, platform.y + platform.height - 1, 12, 6, 0.2, 0, Math.PI * 2);
         ctx.fill();
 
+
         ctx.beginPath();
         ctx.ellipse(leafX + 3, platform.y + platform.height / 2, 9, 5, -0.4, 0, Math.PI * 2);
         ctx.fill();
       }
+
 
       ctx.fillStyle = '#1b4828';
       for (let leafY = platform.y + 5; leafY < platform.y + platform.height - 2; leafY += 8) {
@@ -947,14 +1053,17 @@ function drawScene() {
       ctx.beginPath();
       ctx.moveTo(screenX, platform.y + platform.height);
 
+
       for (let offset = 0; offset <= platform.width; offset += 16) {
         const jaggedTop = platform.y + 3 + (Math.sin((platform.x + offset) * 0.13) + 1) * 2.5;
         ctx.lineTo(screenX + offset, jaggedTop);
       }
 
+
       ctx.lineTo(screenX + platform.width, platform.y + platform.height);
       ctx.closePath();
       ctx.fill();
+
 
       const glowY = platform.y + platform.height - 8;
       const glow = ctx.createLinearGradient(
@@ -964,23 +1073,29 @@ function drawScene() {
         platform.y + platform.height + 12
       );
 
+
       ctx.fillStyle = glow;
       ctx.fillRect(screenX, glowY, platform.width, 18);
 
+
       ctx.fillStyle = 'rgba(255, 200, 110, 0.9)';
       ctx.fillRect(screenX, platform.y + platform.height - 2, platform.width, 2);
+
 
     } else if (levelIndex === 4) {
       ctx.fillStyle = platform.moving ? '#55443c' : '#393238';
       ctx.fillRect(screenX, platform.y, platform.width, platform.height);
 
+
       ctx.fillStyle = platform.moving ? '#a87542' : '#685159';
       ctx.fillRect(screenX, platform.y, platform.width, 5);
+
 
       ctx.fillStyle = '#21191d';
       for (let boltX = screenX + 10; boltX < screenX + platform.width; boltX += 28) {
         ctx.fillRect(boltX, platform.y + 7, 4, 4);
       }
+
 
       if (platform.moving) {
         ctx.strokeStyle = '#8b6043';
@@ -1003,6 +1118,7 @@ function drawScene() {
     for (let x = 0; x < W; x += 10) {
       const height = 5 + (Math.floor(x / 10) % 3) * 3;
 
+
       ctx.beginPath();
       ctx.moveTo(x, H - 18);
       ctx.lineTo(x - 3, H - 18 - height);
@@ -1015,12 +1131,14 @@ function drawScene() {
   for (let x = 45; x < W; x += 120) {
     const flowerY = H - 38
 
+
     ctx.strokeStyle = '#3f7d32';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(x, H - 18);
     ctx.lineTo(x, flowerY + 4);
     ctx.stroke();
+
 
     ctx.fillStyle = '#ff8fc4';
     for (let petal = 0; petal < 5; petal += 1) {
@@ -1035,6 +1153,7 @@ function drawScene() {
       );
       ctx.fill();
   }
+
 
   ctx.fillStyle = '#ffdc4c';
   ctx.beginPath();
@@ -1051,9 +1170,11 @@ function drawScene() {
     ctx.fillRect(pool.x - cameraOffset, pool.y, pool.width, 2);
   }
 
+
   for (const spike of spikes) {
     drawSpike({ ...spike, x: spike.x - cameraOffset });
   }
+
 
   ctx.fillStyle = '#554332';
   ctx.fillRect(goal.x - cameraOffset, goal.y, 5, goal.height);
@@ -1065,13 +1186,16 @@ function drawScene() {
   ctx.closePath();
   ctx.fill();
 
+
   for (const coin of coins) {
     if (coin.collected) continue;
+
 
     ctx.fillStyle = '#f4d13b';
     ctx.beginPath();
     ctx.arc(coin.x - cameraOffset, coin.y, 14, 0, Math.PI * 2);
     ctx.fill();
+
 
     ctx.strokeStyle = '#d7a600';
     ctx.lineWidth = 3;
@@ -1085,12 +1209,15 @@ function updateMovingPlatforms() {
   for (const platform of platforms) {
     if (!platform.moving) continue;
 
+
     const { axis, min, max, speed, dir } = platform.moving;
     if (axis !== 'x') continue;
+
 
     const moveAmount = dir * speed;
     platform.x += moveAmount;
     platform.moving.deltaX = moveAmount;
+
 
     if (platform.x <= min || platform.x + platform.width >= max) {
       platform.moving.dir *= -1;
@@ -1102,10 +1229,12 @@ function updateMovingPlatforms() {
 function landOnPlatforms(player, previousBottom) {
   if (player.vy < 0) return;
 
+
   for (const platform of platforms) {
     const overlaps = player.x < platform.x + platform.width &&
       player.x + player.size > platform.x;
     const crossedTop = previousBottom <= platform.y && player.y + player.size >= platform.y;
+
 
     if (overlaps && crossedTop) {
       player.y = platform.y - player.size;
@@ -1116,22 +1245,27 @@ function landOnPlatforms(player, previousBottom) {
     }
   }
 
+
   player.standingPlatform = null;
 }
 // This is for the coin collect sound
 function playCoinSound() {
   if (!audioContext) return;
 
+
   const now = audioContext.currentTime;
   const oscillator = audioContext.createOscillator();
   const volume = audioContext.createGain();
+
 
   oscillator.type = 'sine';
   oscillator.frequency.setValueAtTime(880, now);
   oscillator.frequency.setValueAtTime(1320, now + 0.08);
 
+
   volume.gain.setValueAtTime(0.2, now);
   volume.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
 
   oscillator.connect(volume);
   volume.connect(audioContext.destination);
@@ -1145,6 +1279,7 @@ function collectCoin(player) {
       player.x < coin.x + 14 &&
       player.y + player.size > coin.y - 14 &&
       player.y < coin.y + 14;
+
 
     if (touching && !coin.collected) {
       coin.collected = true;
@@ -1167,12 +1302,14 @@ function touchesLava(player) {
     player.y + player.size > pool.y);
 }
 
+
 function getCoinsLeft() {
   return coins.filter((coin) => !coin.collected).length;
 }
 // This determines if a player is touching the goal
 function checkGoal() {
   if (hasWon) return;
+
 
   const touching = players.map((player) =>
     player.x < goal.x + goal.width &&
@@ -1184,12 +1321,14 @@ function checkGoal() {
   const enteredGoal = touching.some((atGoal, index) => atGoal && !playerWasAtGoal[index]);
   playerWasAtGoal = touching;
 
+
   if (!touching.some(Boolean)) {
     waitingForOtherPlayer = false;
     goalMessage = '';
     goalMessageSeconds = 0;
     return;
   }
+
 
   const coinsLeft = getCoinsLeft();
   if (coinsLeft > 0) {
@@ -1201,6 +1340,7 @@ function checkGoal() {
     return;
   }
 
+
   waitingForOtherPlayer = !touching.every(Boolean);
   if (waitingForOtherPlayer) {
     if (enteredGoal) {
@@ -1210,21 +1350,26 @@ function checkGoal() {
     return;
   }
 
+
   goalMessage = '';
   goalMessageSeconds = 0;
+
 
   hasWon = true;
   winAnimationTime = 0;
   nextLevelButton.hidden = levelIndex >= levels.length - 1;
 }
 
+
 function updatePlayer(player, deltaSeconds) {
   const { controls } = player;
   const dir = (controls.right ? 1 : 0) - (controls.left ? 1 : 0);
 
+
   if (player.standingPlatform && player.standingPlatform.moving) {
     player.x += player.standingPlatform.moving.deltaX;
   }
+
 
   if (controls.up && player.onGround) {
     player.vy = -13;
@@ -1232,10 +1377,12 @@ function updatePlayer(player, deltaSeconds) {
     player.standingPlatform = null;
   }
 
+
   const previousBottom = player.y + player.size;
   player.vy += 0.7;
   player.x += dir * 5;
   player.y += player.vy;
+
 
   player.onGround = false;
   player.standingPlatform = null;
@@ -1265,13 +1412,16 @@ if (damageTicks > 0) {
     player.lavaTime = 0;
   }
 
+
   collectCoin(player);
   checkGoal();
+
 
   if (player.x < 0) player.x = 0;
   const worldWidth = levels[levelIndex].worldWidth ?? W;
   if (player.x + player.size > worldWidth) player.x = worldWidth - player.size;
 }
+
 
 function draw(timestamp = 0) {
   const deltaSeconds = lastFrameTime === 0 ? 0 : Math.min((timestamp - lastFrameTime) / 1000, 0.1);
@@ -1281,16 +1431,20 @@ function draw(timestamp = 0) {
   const playersCenter = players.reduce((sum, player) => sum + player.x + player.size / 2, 0) / players.length;
   cameraOffset = Math.max(0, Math.min(playersCenter - W / 2, worldWidth - W));
 
+
   ctx.clearRect(0, 0, W, H);
+
 
   if (introActive) {
     introTime += deltaSeconds;
     drawIntroScene(introTime);
 
+
     if (introTime >= 10) {
       introActive = false;
       loadLevel(0);
     }
+
 
     requestAnimationFrame(draw);
     return;
@@ -1299,31 +1453,39 @@ function draw(timestamp = 0) {
 if (!gameStarted) {
   drawScene();
 
+
   ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
   ctx.fillRect(0, 0, W, H);
+
 
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.font = 'bold 64px sans-serif';
   ctx.fillText('Press Start to Begin', W / 2, H / 2 - 100);
 
+
   ctx.font = '22px sans-serif';
   ctx.fillText('A: Arrow keys to move and jump', W / 2, H / 2 - 35);
   ctx.fillText('Q: WAD keys to move and jump', W / 2, H / 2 + 5);
+
 
   requestAnimationFrame(draw);
   return;
 }
 
+
 updateMovingPlatforms();
 drawScene();
 
+
   drawHealthBars();
+
 
   for (const player of players) {
     if (!hasWon) updatePlayer(player, deltaSeconds);
     drawFace(player);
   }
+
 
   if (waitingForOtherPlayer && goalMessageSeconds > 0 && !hasWon) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -1335,26 +1497,33 @@ drawScene();
     ctx.fillText(goalMessage, W / 2, H / 2);
   }
 
+
   if (hasWon) {
     winAnimationTime += deltaSeconds;
 
+
     const isFinalLevel = levelIndex === levels.length - 1;
+
 
     if (isFinalLevel && winAnimationTime >= 3.2) {
       drawGameOverScreen();
     } else {
       drawHighFiveCelebration();
 
+
       if (isFinalLevel && winAnimationTime > 2.2) {
 
+
         levelMusic[levelIndex].volume = Math.max(
-          0, 
+          0,
           levelMusic[levelIndex].volume - deltaSeconds
         );
+
 
         if (levelMusic[levelIndex].volume === 0) {
           levelMusic[levelIndex].pause();
         }
+
 
         const fade = Math.min((winAnimationTime - 2.2) / 1, 1);
         ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
@@ -1363,12 +1532,15 @@ drawScene();
     }
   }
 
+
   requestAnimationFrame(draw);
 }
+
 
 function setKey(event, pressed) {
   const key = event.key.toLowerCase();
   const mapping = keyMap[key];
+
 
   if (mapping) {
     const [keySet, action] = mapping;
@@ -1377,18 +1549,21 @@ function setKey(event, pressed) {
   }
 }
 
+
 window.addEventListener('keydown', (event) => setKey(event, true));
 window.addEventListener('keyup', (event) => setKey(event, false));
+
 
 loadLevel(0);
 draw();
 
+
 // And that brings us to the end of the JavaScript portion of the code! If you're reading this, thanks for looking at the code <3
-// I hope you have a great rest of your day/night! 
+// I hope you have a great rest of your day/night!
 // Also, for anyone wondering, you an use this code, just remember to give credit please!
 // I'll leave a few fun facts for you, since you came all the way here.
 // The inspiration for the names "Q" and "A" come from my dad and his brother, A for Antonio, and Q for Quinten.
 // This is my first game, hopefully the first of many!
 // I'm 16 years old at the time of writing this.
 // There MIGHT (very strong might) be a part two of this game.
-// Note to self, open terminal and paste "python3 -m http.server 8000" and click enter to open game.
+// Note to self, open terminal and paste "python3 -m http.server 8000" and click enter to open the game.
